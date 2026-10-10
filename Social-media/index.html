@@ -1,0 +1,99 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Social Media Platform</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+    <header>
+      <h1>Prodigy Social</h1>
+    </header>
+    <section class="profile">
+      <input type="text" id="username" placeholder="Enter your username" />
+      <button onclick="createProfile()">Create Profile</button>
+    </section>
+
+    <section class="new-post">
+      <textarea id="postContent" placeholder="What's on your mind?"></textarea>
+      <input type="file" id="mediaUpload" />
+      <input type="text" id="postTag" placeholder="Tag (e.g. #fun)" />
+      <button onclick="sharePost()">Share</button>
+    </section>
+
+    <section class="feed" id="feed">
+      <!-- Posts will load here -->
+    </section>
+  </div>
+
+  <script>
+    const posts = [];
+
+    function createProfile() {
+      const username = document.getElementById("username").value;
+      alert(`Profile created for ${username}`);
+    }
+
+    function sharePost() {
+      const content = document.getElementById("postContent").value;
+      const tag = document.getElementById("postTag").value;
+      const mediaInput = document.getElementById("mediaUpload");
+      const media = mediaInput.files[0];
+
+      const post = {
+        content,
+        tag,
+        mediaUrl: media ? URL.createObjectURL(media) : null,
+        likes: 0,
+        comments: []
+      };
+
+      posts.unshift(post);
+      renderPosts();
+
+      document.getElementById("postContent").value = "";
+      document.getElementById("postTag").value = "";
+      mediaInput.value = "";
+    }
+
+    function likePost(index) {
+      posts[index].likes++;
+      renderPosts();
+    }
+
+    function commentPost(index) {
+      const comment = prompt("Enter your comment:");
+      if (comment) {
+        posts[index].comments.push(comment);
+        renderPosts();
+      }
+    }
+
+    function renderPosts() {
+      const feed = document.getElementById("feed");
+      feed.innerHTML = "";
+
+      posts.forEach((post, index) => {
+        const postElement = document.createElement("div");
+        postElement.className = "post";
+        postElement.innerHTML = `
+          <p>${post.content}</p>
+          ${post.mediaUrl ? `<img src="${post.mediaUrl}" alt="media" />` : ""}
+          <p><strong>${post.tag}</strong></p>
+          <button onclick="likePost(${index})">Like (${post.likes})</button>
+          <button onclick="commentPost(${index})">Comment</button>
+          <div class="comments">
+            ${post.comments.map(c => `<p>${c}</p>`).join('')}
+          </div>
+        `;
+        feed.appendChild(postElement);
+      });
+    }
+   
+  </script>
+   <script src="script.js"></script>
+</body>
+</html>

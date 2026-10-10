@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>7-Day Free AI Skills Challenge | NxtWave</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+Telugu:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --accent: #22d3ee;
+            --accent-warm: #f59e0b;
+            --bg-dark: #0f0f1a;
+            --bg-card: #1a1a2e;
+            --bg-card-hover: #252542;
+            --text: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: #2d2d44;
+            --success: #22c55e;
+            --danger: #ef4444;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', 'Noto Sans Telugu', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated background mesh */
+        .bg-mesh {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(99,102,241,0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(34,211,238,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(245,158,11,0.05) 0%, transparent 50%);
+            z-index: -1;
+            animation: meshMove 20s ease-in-out infinite alternate;
+        }
+        @keyframes meshMove {
+            0% { transform: translate(0,0) scale(1); }
+            100% { transform: translate(-30px,20px) scale(1.1); }
+        }
+
+        /* Floating particles */
+        .particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: -1; }
+        .particle {
+            position: absolute; width: 4px; height: 4px; background: var(--accent); border-radius: 50%;
+            opacity: 0.3; animation: float 15s infinite;
+        }
+        @keyframes float {
+            0%,100% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            50% { transform: translateY(-10vh) rotate(180deg); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed; top: 0; width: 100%; padding: 1rem 2rem;
+            background: rgba(15,15,26,0.8); backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border); z-index: 1000;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .logo { font-weight: 800; font-size: 1.5rem; color: var(--text); }
+        .logo span { color: var(--accent); }
+        .nav-cta {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white; padding: 0.6rem 1.5rem; border-radius: 50px;
+            text-decoration: none; font-weight: 700; font-size: 0.9rem;
+            border: none; cursor: pointer; transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(99,102,241,0.4);
+        }
+        .nav-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(99,102,241,0.6); }
+
+        /* Hero */
+        .hero {
+            min-height: 100vh; display: flex; align-items: center;
+            padding: 8rem 2rem 4rem; position: relative; overflow: hidden;
+        }
+        .hero-container { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+        .hero-badge {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            background: rgba(99,102,241,0.15); border: 1px solid var(--primary);
+            color: var(--accent); padding: 0.5rem 1rem; border-radius: 50px;
+            font-size: 0.85rem; font-weight: 600; margin-bottom: 1.5rem;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(99,102,241,0.4); } 50% { box-shadow: 0 0 0 10px rgba(99,102,241,0); } }
+        .hero h1 { font-size: 3.5rem; font-weight: 900; line-height: 1.1; margin-bottom: 1.5rem; }
+        .hero h1 .gradient { background: linear-gradient(135deg, var(--accent), var(--primary), var(--accent-warm)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .hero-subtitle { font-size: 1.25rem; color: var(--text-muted); margin-bottom: 2rem; max-width: 500px; }
+        .hero-subtitle .telugu { font-family: 'Noto Sans Telugu', sans-serif; color: var(--accent); font-weight: 700; }
+        .hero-stats { display: flex; gap: 2rem; margin-bottom: 2rem; }
+        .stat { text-align: center; }
+        .stat-value { font-size: 1.75rem; font-weight: 800; color: var(--accent); }
+        .stat-label { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+        .hero-cta {
+            display: inline-flex; align-items: center; gap: 0.75rem;
+            background: linear-gradient(135deg, var(--accent-warm), #d97706);
+            color: var(--bg-dark); padding: 1.2rem 2.5rem; border-radius: 50px;
+            text-decoration: none; font-weight: 800; font-size: 1.1rem;
+            border: none; cursor: pointer; transition: all 0.3s;
+            box-shadow: 0 8px 30px rgba(245,158,11,0.4);
+            animation: ctaBounce 2s infinite;
+        }
+        @keyframes ctaBounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+        .hero-cta:hover { transform: scale(1.05); box-shadow: 0 12px 40px rgba(245,158,11,0.6); }
+
+        .hero-visual {
+            position: relative; display: flex; justify-content: center; align-items: center;
+        }
+        .hero-card {
+            background: var(--bg-card); border: 1px solid var(--border); border-radius: 24px;
+            padding: 2rem; width: 100%; max-width: 400px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+            transform: perspective(1000px) rotateY(-5deg) rotateX(5deg);
+            transition: transform 0.5s;
+        }
+        .hero-card:hover { transform: perspective(1000px) rotateY(0deg) rotateX(0deg); }
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+        .card-title { font-weight: 700; font-size: 1.1rem; }
+        .live-indicator { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; color: var(--success); }
+        .live-dot { width: 8px; height: 8px; background: var(--success); border-radius: 50%; animation: blink 1s infinite; }
+        @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+        .leaderboard-item { display: flex; align-items: center; gap: 1rem; padding: 0.75rem; border-radius: 12px; margin-bottom: 0.5rem; background: rgba(255,255,255,0.03); }
+        .leaderboard-item.top { background: linear-gradient(90deg, rgba(245,158,11,0.15), transparent); border-left: 3px solid var(--accent-warm); }
+        .rank { font-weight: 800; width: 24px; text-align: center; }
+        .rank.gold { color: var(--accent-warm); }
+        .avatar { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--accent)); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.8rem; }
+        .lb-name { flex: 1; font-size: 0.9rem; }
+        .lb-xp { font-weight: 700; color: var(--accent); font-size: 0.9rem; }
+
+        /* Countdown */
+        .countdown-section { background: linear-gradient(90deg, rgba(99,102,241,0.1), rgba(34,211,238,0.1)); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 2rem; text-align: center; }
+        .countdown-label { font-size: 0.9rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 1rem; }
+        .countdown { display: flex; justify-content: center; gap: 1.5rem; }
+        .countdown-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 1rem 1.5rem; min-width: 80px; }
+        .countdown-value { font-size: 2.5rem; font-weight: 900; color: var(--accent); display: block; }
+        .countdown-unit { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+
+        /* Sections */
+        section { padding: 5rem 2rem; max-width: 1200px; margin: 0 auto; }
+        .section-header { text-align: center; margin-bottom: 3rem; }
+        .section-tag { display: inline-block; background: rgba(99,102,241,0.15); color: var(--accent); padding: 0.4rem 1rem; border-radius: 50px; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1rem; }
+        .section-title { font-size: 2.5rem; font-weight: 800; margin-bottom: 1rem; }
+        .section-subtitle { color: var(--text-muted); font-size: 1.1rem; max-width: 600px; margin: 0 auto; }
+
+        /* What You'll Learn */
+        .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+        .skill-card {
+            background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px;
+            padding: 2rem; transition: all 0.3s; position: relative; overflow: hidden;
+        }
+        .skill-card::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--accent)); transform: scaleX(0); transform-origin: left; transition: transform 0.3s;
+        }
+        .skill-card:hover { transform: translateY(-5px); border-color: var(--primary); box-shadow: 0 20px 40px rgba(99,102,241,0.15); }
+        .skill-card:hover::before { transform: scaleX(1); }
+        .skill-icon { width: 56px; height: 56px; border-radius: 16px; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 1.5rem; }
+        .skill-card h3 { font-size: 1.25rem; margin-bottom: 0.75rem; }
+        .skill-card p { color: var(--text-muted); font-size: 0.95rem; }
+        .skill-tag { display: inline-block; background: rgba(34,211,238,0.1); color: var(--accent); padding: 0.25rem 0.75rem; border-radius: 50px; font-size: 0.75rem; font-weight: 600; margin-top: 1rem; }
+
+        /* 7-Day Timeline */
+        .timeline { position: relative; padding-left: 2rem; }
+        .timeline::before {
+            content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 2px;
+            background: linear-gradient(180deg, var(--primary), var(--accent), var(--accent-warm));
+        }
+        .day-item { position: relative; padding-bottom: 2.5rem; }
+        .day-item:last-child { padding-bottom: 0; }
+        .day-dot {
+            position: absolute; left: -2rem; top: 0.25rem; width: 16px; height: 16px;
+            background: var(--bg-dark); border: 3px solid var(--primary); border-radius: 50%;
+            transform: translateX(-7px);
+        }
+        .day-item.active .day-dot { background: var(--primary); box-shadow: 0 0 0 4px rgba(99,102,241,0.3); }
+        .day-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 0.75rem; }
+        .day-number { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; padding: 0.35rem 1rem; border-radius: 50px; font-weight: 700; font-size: 0.85rem; }
+        .day-title { font-weight: 700; font-size: 1.1rem; }
+        .day-desc { color: var(--text-muted); padding-left: 0; }
+        .day-output { display: inline-flex; align-items: center; gap: 0.5rem; margin-top: 0.75rem; background: rgba(34,211,238,0.08); border: 1px solid rgba(34,211,238,0.2); color: var(--accent); padding: 0.5rem 1rem; border-radius: 50px; font-size: 0.85rem; font-weight: 600; }
+
+        /* Gamification */
+        .gamification-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+        .gamify-card {
+            background: var(--bg-card); border: 1px solid var(--border); border-radius: 24px;
+            padding: 2.5rem; text-align: center; transition: all 0.3s;
+        }
+        .gamify-card:hover { border-color: var(--accent-warm); transform: translateY(-5px); }
+        .gamify-icon { font-size: 3rem; margin-bottom: 1.5rem; }
+        .gamify-card h3 { font-size: 1.5rem; margin-bottom: 0.75rem; }
+        .gamify-card p { color: var(--text-muted); margin-bottom: 1.5rem; }
+        .gamify-stat { font-size: 2rem; font-weight: 900; color: var(--accent-warm); }
+        .gamify-label { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+
+        /* Rewards */
+        .rewards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; }
+        .reward-card {
+            background: linear-gradient(135deg, var(--bg-card), var(--bg-card-hover));
+            border: 1px solid var(--border); border-radius: 20px; padding: 2rem;
+            text-align: center; transition: all 0.3s; position: relative;
+        }
+        .reward-card.featured { border-color: var(--accent-warm); transform: scale(1.05); box-shadow: 0 20px 40px rgba(245,158,11,0.15); }
+        .reward-card.featured::after {
+            content: 'TOP PRIZE'; position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--accent-warm), #d97706); color: var(--bg-dark);
+            padding: 0.3rem 1rem; border-radius: 50px; font-size: 0.75rem; font-weight: 800;
+        }
+        .reward-card:hover { transform: translateY(-5px); border-color: var(--primary); }
+        .reward-card.featured:hover { transform: scale(1.05) translateY(-5px); }
+        .reward-icon { font-size: 3rem; margin-bottom: 1rem; }
+        .reward-card h3 { font-size: 1.2rem; margin-bottom: 0.5rem; }
+        .reward-card p { color: var(--text-muted); font-size: 0.9rem; }
+
+        /* Social Proof */
+        .testimonials-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
+        .testimonial-card {
+            background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px;
+            padding: 2rem; transition: all 0.3s;
+        }
+        .testimonial-card:hover { border-color: var(--primary); }
+        .testimonial-stars { color: var(--accent-warm); margin-bottom: 1rem; font-size: 1.2rem; }
+        .testimonial-text { font-style: italic; color: var(--text-muted); margin-bottom: 1.5rem; line-height: 1.7; }
+        .testimonial-author { display: flex; align-items: center; gap: 1rem; }
+        .testimonial-avatar { width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--accent)); display: flex; align-items: center; justify-content: center; font-weight: 700; }
+        .testimonial-name { font-weight: 700; }
+        .testimonial-detail { font-size: 0.85rem; color: var(--text-muted); }
+        .testimonial-badge { display: inline-block; background: rgba(34,211,238,0.1); color: var(--accent); padding: 0.2rem 0.6rem; border-radius: 50px; font-size: 0.75rem; margin-top: 0.5rem; }
+
+        .trust-bar {
+            display: flex; justify-content: center; gap: 3rem; flex-wrap: wrap; margin-top: 3rem;
+            padding: 2rem; background: rgba(255,255,255,0.02); border-radius: 16px; border: 1px solid var(--border);
+        }
+        .trust-item { text-align: center; }
+        .trust-value { font-size: 2rem; font-weight: 900; color: var(--accent); }
+        .trust-label { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+
+        /* Final CTA */
+        .final-cta {
+            background: linear-gradient(135deg, rgba(99,102,241,0.1), rgba(245,158,11,0.1));
+            border: 1px solid var(--border); border-radius: 32px; padding: 4rem 2rem;
+            text-align: center; position: relative; overflow: hidden;
+        }
+        .final-cta::before {
+            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(99,102,241,0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+        @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .final-cta-content { position: relative; z-index: 1; }
+        .final-cta h2 { font-size: 2.5rem; margin-bottom: 1rem; }
+        .final-cta p { color: var(--text-muted); font-size: 1.1rem; margin-bottom: 2rem; max-width: 500px; margin-left: auto; margin-right: auto; }
+        .final-cta .hero-cta { font-size: 1.25rem; padding: 1.5rem 3rem; }
+        .urgency-text { color: var(--danger); font-weight: 700; margin-top: 1rem; font-size: 0.95rem; }
+
+        /* Footer */
+        footer { text-align: center; padding: 3rem 2rem; color: var(--text-muted); font-size: 0.9rem; border-top: 1px solid var(--border); }
+        footer a { color: var(--accent); text-decoration: none; }
+
+        /* Floating bottom bar */
+        .floating-bar {
+            position: fixed; bottom: 0; left: 0; width: 100%;
+            background: rgba(15,15,26,0.95); backdrop-filter: blur(20px);
+            border-top: 1px solid var(--border); padding: 1rem 2rem;
+            display: flex; justify-content: space-between; align-items: center;
+            z-index: 999; transform: translateY(100%); transition: transform 0.5s;
+        }
+        .floating-bar.visible { transform: translateY(0); }
+        .floating-bar-text { font-weight: 700; }
+        .floating-bar-text span { color: var(--accent-warm); }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            .hero-container { grid-template-columns: 1fr; gap: 2rem; }
+            .hero h1 { font-size: 2.25rem; }
+            .hero-stats { gap: 1rem; }
+            .section-title { font-size: 1.75rem; }
+            .countdown { gap: 0.75rem; }
+            .countdown-box { padding: 0.75rem 1rem; min-width: 60px; }
+            .countdown-value { font-size: 1.75rem; }
+            .gamification-grid, .skills-grid { grid-template-columns: 1fr; }
+            .floating-bar { flex-direction: column; gap: 0.75rem; padding: 1rem; }
+            .reward-card.featured { transform: scale(1); }
+            .reward-card.featured:hover { transform: scale(1) translateY(-5px); }
+        }
+
+        /* Scroll animations */
+        .fade-in { opacity: 0; transform: translateY(30px); transition: all 0.6s ease-out; }
+        .fade-in.visible { opacity: 1; transform: translateY(0); }
+    </style>
+<base target="_blank">
+</head>
+<body>
+    <div class="bg-mesh"></div>
+    <div class="particles" id="particles"></div>
+
+    <nav>
+        <div class="logo">Nxt<span>Wave</span></div>
+        <a href="https://forms.gle/nxtwave-ai-challenge-2026" target="_blank" class="nav-cta">Register Now →</a>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <div class="hero-badge">⚡ 100% Free • Limited Seats • Starts July 1</div>
+                <h1>Master AI in <span class="gradient">7 Days</span></h1>
+                <p class="hero-subtitle">
+                    Build real AI projects, win prizes, and get certified. 
+                    <span class="telugu">ఆంధ్రప్రదేశ్ & తెలంగాణ</span> students — your AI future starts here.
+                </p>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <div class="stat-value">1,200+</div>
+                        <div class="stat-label">Already Joined</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">₹50K</div>
+                        <div class="stat-label">Prize Pool</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">7</div>
+                        <div class="stat-label">Days Only</div>
+                    </div>
+                </div>
+                <a href="https://forms.gle/nxtwave-ai-challenge-2026" target="_blank" class="hero-cta">
+                    Register for Free 🚀
+                </a>
+                <p style="margin-top:1rem;color:var(--text-muted);font-size:0.85rem;">⏳ Only 300 spots left for this cohort</p>
+            </div>
+            <div class="hero-visual">
+                <div class="hero-card">
+                    <div class="card-header">
+                        <div class="card-title">🏆 Live Leaderboard</div>
+                        <div class="live-indicator"><div class="live-dot"></div> LIVE</div>
+                    </div>
+                    <div class="leaderboard-item top">
+                        <div class="rank gold">1</div>
+                        <div class="avatar">RK</div>
+                        <div class="lb-name">Ravi K. (Vizag)</div>
+                        <div class="lb-xp">2,450 XP</div>
+                    </div>
+                    <div class="leaderboard-item">
+                        <div class="rank">2</div>
+                        <div class="avatar">SP</div>
+                        <div class="lb-name">Sneha P. (Warangal)</div>
+                        <div class="lb-xp">2,180 XP</div>
+                    </div>
+                    <div class="leaderboard-item">
+                        <div class="rank">3</div>
+                        <div class="avatar">AK</div>
+                        <div class="lb-name">Arjun K. (Guntur)</div>
+                        <div class="lb-xp">1,920 XP</div>
+                    </div>
+                    <div class="leaderboard-item">
+                        <div class="rank">4</div>
+                        <div class="avatar">NT</div>
+                        <div class="lb-name">Neha T. (Hyderabad)</div>
+                        <div class="lb-xp">1,750 XP</div>
+                    </div>
+                    <div style="text-align:center;margin-top:1rem;color:var(--text-muted);font-size:0.8rem;">
+                        Join now to climb the ranks →
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="countdown-section">
+        <div class="countdown-label">⏰ Challenge Starts In</div>
+        <div class="countdown" id="countdown">
+            <div class="countdown-box"><span class="countdown-value" id="days">06</span><span class="countdown-unit">Days</span></div>
+            <div class="countdown-box"><span class="countdown-value" id="hours">14</span><span class="countdown-unit">Hours</span></div>
+            <div class="countdown-box"><span class="countdown-value" id="minutes">32</span><span class="countdown-unit">Minutes</span></div>
+            <div class="countdown-box"><span class="countdown-value" id="seconds">45</span><span class="countdown-unit">Seconds</span></div>
+        </div>
+    </div>
+
+    <section id="learn">
+        <div class="section-header fade-in">
+            <div class="section-tag">What You Will Build</div>
+            <h2 class="section-title">7 Real AI Projects. 1 Week.</h2>
+            <p class="section-subtitle">No theory dumps. You will build portfolio-ready projects that impress recruiters.</p>
+        </div>
+        <div class="skills-grid">
+            <div class="skill-card fade-in">
+                <div class="skill-icon">🤖</div>
+                <h3>AI Chatbot Builder</h3>
+                <p>Create a working customer support chatbot using no-code AI tools and prompt engineering.</p>
+                <span class="skill-tag">Day 1-2 Output</span>
+            </div>
+            <div class="skill-card fade-in">
+                <div class="skill-icon">📊</div>
+                <h3>Data Analyst AI Agent</h3>
+                <p>Build an AI agent that cleans data, generates insights, and creates visual dashboards automatically.</p>
+                <span class="skill-tag">Day 3-4 Output</span>
+            </div>
+            <div class="skill-card fade-in">
+                <div class="skill-icon">🎨</div>
+                <h3>AI Content Studio</h3>
+                <p>Launch a content generation pipeline — from AI-written blogs to auto-generated social media creatives.</p>
+                <span class="skill-tag">Day 5 Output</span>
+            </div>
+            <div class="skill-card fade-in">
+                <div class="skill-icon">💼</div>
+                <h3>AI Resume & Job Matcher</h3>
+                <p>Build a tool that optimizes resumes and matches them to job descriptions using AI parsing.</p>
+                <span class="skill-tag">Day 6 Output</span>
+            </div>
+            <div class="skill-card fade-in">
+                <div class="skill-icon">🚀</div>
+                <h3>Capstone: Your Own AI Product</h3>
+                <p>Combine everything into a final project. Top 10 projects get featured on NxtWave's showcase.</p>
+                <span class="skill-tag">Day 7 Output</span>
+            </div>
+            <div class="skill-card fade-in">
+                <div class="skill-icon">📜</div>
+                <h3>Verified Certificate</h3>
+                <p>Every finisher gets a shareable, LinkedIn-ready certificate of completion from NxtWave.</p>
+                <span class="skill-tag">Final Reward</span>
+            </div>
+        </div>
+    </section>
+
+    <section id="schedule" style="background:rgba(255,255,255,0.02);border-radius:32px;margin:2rem auto;">
+        <div class="section-header fade-in">
+            <div class="section-tag">How It Works</div>
+            <h2 class="section-title">Your 7-Day Battle Plan</h2>
+            <p class="section-subtitle">Daily missions, live sessions, and instant feedback. Structured like a game, built like a bootcamp.</p>
+        </div>
+        <div class="timeline fade-in">
+            <div class="day-item active">
+                <div class="day-dot"></div>
+                <div class="day-header"><span class="day-number">DAY 1</span><span class="day-title">AI Foundations & Prompt Engineering</span></div>
+                <p class="day-desc">Learn how to talk to AI. Master prompt frameworks that 10x your output quality. Build your first chatbot.</p>
+                <span class="day-output">⚡ Output: Working Chatbot</span>
+            </div>
+            <div class="day-item">
+                <div class="day-dot"></div>
+                <div class="day-header"><span class="day-number">DAY 2</span><span class="day-title">No-Code AI Automation</span></div>
+                <p class="day-desc">Connect AI tools with Zapier and Make. Build workflows that run while you sleep. No coding required.</p>
+                <span class="day-output">⚡ Output: Automated Workflow</span>
+            </div>
+            <div class="day-item">
+                <div class="day-dot"></div>
+                <div class="day-header"><span class="day-number">DAY 3</span><span class="day-title">AI for Data & Analytics</span></div>
+                <p class="day-desc">Use AI to analyze datasets, generate charts, and write data stories. Excel skills that make you irreplaceable.</p>
+                <span class="day-output">⚡ Output: Data Dashboard</span>
+            </div>
+            <div class="day-item">
+                <div class="day-dot"></div>
+                <div class="day-header"><span class="day-number">DAY 4</span><span class="day-title">AI Content Creation</span></div>
+                <p class="day-desc">Generate blogs, videos scripts, and social posts with AI. Learn to maintain your unique voice while scaling output.</p>
+                <span class="day-output">⚡ Output: Content Portfolio</span>
+            </div>
+            <div class="day-item">
+                <div class="day-dot"></div>
+                <div class="day-header"><span class="day-number">DAY 5</span><span class="day-title">AI for Career Growth</span></div>
+                <p class="day-desc">AI-powered resume building, interview prep, and LinkedIn optimization. Stand out in campus placements.</p>
+                <span class="day-output">⚡ Output: Optimized Resume + LinkedIn</span>
+            </div>
+            <div class="day-item">
+                <div class="day-dot"></div>
+                <div class="day-header"><span class="day-number">DAY 6</span><span class="day-title">Mini-Hackathon</span></div>
+                <p class="day-desc">48-hour team sprint. Solve a real problem for a local business using AI. Mentors available 24/7 on Discord.</p>
+                <span class="day-output">⚡ Output: Hackathon Project</span>
+            </div>
+            <div class="day-item">
+                <div class="day-dot"></div>
+                <div class="day-header"><span class="day-number">DAY 7</span><span class="day-title">Demo Day & Graduation</span></div>
+                <p class="day-desc">Present your project to industry judges. Top performers win prizes. Everyone gets certified.</p>
+                <span class="day-output">⚡ Output: Certificate + Prizes</span>
+            </div>
+        </div>
+    </section>
+
+    <section id="gamify">
+        <div class="section-header fade-in">
+            <div class="section-tag">Game On</div>
+            <h2 class="section-title">Learn Like It's a Game</h2>
+            <p class="section-subtitle">Earn XP, unlock streaks, and climb the leaderboard. Learning has never been this addictive.</p>
+        </div>
+        <div class="gamification-grid">
+            <div class="gamify-card fade-in">
+                <div class="gamify-icon">🔥</div>
+                <h3>Daily Streaks</h3>
+                <p>Submit your daily project before midnight to keep your streak alive. 7-day streak holders get exclusive bonus content.</p>
+                <div class="gamify-stat">7 Days</div>
+                <div class="gamify-label">Max Streak Reward</div>
+            </div>
+            <div class="gamify-card fade-in">
+                <div class="gamify-icon">🏆</div>
+                <h3>Live Leaderboard</h3>
+                <p>Compete with students from Vizag to Warangal. Real-time rankings updated every hour based on project quality and speed.</p>
+                <div class="gamify-stat">Top 50</div>
+                <div class="gamify-label">Win Certificates of Excellence</div>
+            </div>
+            <div class="gamify-card fade-in">
+                <div class="gamify-icon">⭐</div>
+                <h3>XP & Badges</h3>
+                <p>Collect badges: First Project, Speed Demon, Code Poet, Team Player, and the legendary "7-Day Warrior."</p>
+                <div class="gamify-stat">2,500+</div>
+                <div class="gamify-label">Max XP Achievable</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="rewards">
+        <div class="section-header fade-in">
+            <div class="section-tag">What's In It For You</div>
+            <h2 class="section-title">Rewards Worth ₹50,000</h2>
+            <p class="section-subtitle">Every participant wins something. Top performers take home cash, internships, and lifetime bragging rights.</p>
+        </div>
+        <div class="rewards-grid">
+            <div class="reward-card fade-in">
+                <div class="reward-icon">🥇</div>
+                <h3>Grand Winner</h3>
+                <p>₹10,000 cash + Internship interview at NxtWave + 1-year Pro subscription + Featured on our blog</p>
+            </div>
+            <div class="reward-card featured fade-in">
+                <div class="reward-icon">🥈</div>
+                <h3>Runner-Up (2nd)</h3>
+                <p>₹5,000 cash + Internship interview + 6-month Pro subscription + LinkedIn spotlight</p>
+            </div>
+            <div class="reward-card fade-in">
+                <div class="reward-icon">🥉</div>
+                <h3>3rd Place</h3>
+                <p>₹3,000 cash + 3-month Pro subscription + Certificate of Excellence + Swag kit</p>
+            </div>
+            <div class="reward-card fade-in">
+                <div class="reward-icon">🎖️</div>
+                <h3>Top 50</h3>
+                <p>Certificate of Excellence + Exclusive access to NxtWave alumni network + Priority for future events</p>
+            </div>
+            <div class="reward-card fade-in">
+                <div class="reward-icon">📜</div>
+                <h3>All Finishers</h3>
+                <p>Verified completion certificate + Digital badge for LinkedIn + Access to recorded sessions forever</p>
+            </div>
+            <div class="reward-card fade-in">
+                <div class="reward-icon">🎁</div>
+                <h3>Referral Bonus</h3>
+                <p>Refer 3 friends who complete Day 1 → Get exclusive AI toolkits worth ₹2,000 for free</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="social-proof">
+        <div class="section-header fade-in">
+            <div class="section-tag">Student Love</div>
+            <h2 class="section-title">What Past Challengers Say</h2>
+            <p class="section-subtitle">Real students from Andhra Pradesh & Telangana who transformed their skills in one week.</p>
+        </div>
+        <div class="testimonials-grid">
+            <div class="testimonial-card fade-in">
+                <div class="testimonial-stars">★★★★★</div>
+                <p class="testimonial-text">"I joined from a Tier-3 college in Guntur with zero AI knowledge. In 7 days, I built a chatbot that my college now uses for admissions. The gamification kept me hooked every single day."</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">RK</div>
+                    <div>
+                        <div class="testimonial-name">Ravi Kumar</div>
+                        <div class="testimonial-detail">B.Tech CSE, RVRJC College</div>
+                        <span class="testimonial-badge">🏆 Grand Winner - Batch 1</span>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card fade-in">
+                <div class="testimonial-stars">★★★★★</div>
+                <p class="testimonial-text">"The leaderboard pushed me to submit better projects every day. I ended up in Top 10 and got referred to a startup internship in Hyderabad. Best week of my college life."</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">SP</div>
+                    <div>
+                        <div class="testimonial-name">Sneha Priya</div>
+                        <div class="testimonial-detail">B.Tech IT, KLU Vijayawada</div>
+                        <span class="testimonial-badge">🥈 Runner-Up - Batch 2</span>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card fade-in">
+                <div class="testimonial-stars">★★★★★</div>
+                <p class="testimonial-text">"As a non-CS student from Warangal, I was scared. But the no-code approach on Day 2 changed everything. I now run a small AI automation agency while finishing my degree."</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">AK</div>
+                    <div>
+                        <div class="testimonial-name">Arjun K.</div>
+                        <div class="testimonial-detail">B.Com, Kakatiya University</div>
+                        <span class="testimonial-badge">📜 7-Day Warrior</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="trust-bar fade-in">
+            <div class="trust-item"><div class="trust-value">4,200+</div><div class="trust-label">Total Registrations</div></div>
+            <div class="trust-item"><div class="trust-value">1,850+</div><div class="trust-label">Certificates Issued</div></div>
+            <div class="trust-item"><div class="trust-value">92%</div><div class="trust-label">Completion Rate</div></div>
+            <div class="trust-item"><div class="trust-value">150+</div><div class="trust-label">Internship Referrals</div></div>
+        </div>
+    </section>
+
+    <section>
+        <div class="final-cta fade-in">
+            <div class="final-cta-content">
+                <h2>Your AI Journey Starts in <span style="color:var(--accent-warm);">7 Days</span></h2>
+                <p>Join 1,200+ students from Andhra Pradesh & Telangana who are already building their AI future. Don't be the one who watches from the sidelines.</p>
+                <a href="https://forms.gle/nxtwave-ai-challenge-2026" target="_blank" class="hero-cta">
+                    Claim My Free Spot Now 🚀
+                </a>
+                <p class="urgency-text">⚠️ Registration closes when we hit 1,500 students. Currently at 1,203.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2026 NxtWave. Built for the future builders of Andhra Pradesh & Telangana.</p>
+        <p style="margin-top:0.5rem;">Questions? WhatsApp us at <a href="https://wa.me/919999999999">+91 99999 99999</a> or email <a href="mailto:challenge@nxtwave.com">challenge@nxtwave.com</a></p>
+    </footer>
+
+    <div class="floating-bar" id="floatingBar">
+        <div class="floating-bar-text">🔥 <span>1,203</span> / 1,500 spots filled</div>
+        <a href="https://forms.gle/nxtwave-ai-challenge-2026" target="_blank" class="nav-cta">Register Now →</a>
+    </div>
+
+    <script>
+        // Countdown timer
+        const targetDate = new Date();
+        targetDate.setDate(targetDate.getDate() + 6);
+        targetDate.setHours(14, 0, 0, 0);
+
+        function updateCountdown() {
+            const now = new Date();
+            const diff = targetDate - now;
+            if (diff <= 0) return;
+            const d = Math.floor(diff / (1000*60*60*24));
+            const h = Math.floor((diff / (1000*60*60)) % 24);
+            const m = Math.floor((diff / (1000*60)) % 60);
+            const s = Math.floor((diff / 1000) % 60);
+            document.getElementById('days').textContent = String(d).padStart(2,'0');
+            document.getElementById('hours').textContent = String(h).padStart(2,'0');
+            document.getElementById('minutes').textContent = String(m).padStart(2,'0');
+            document.getElementById('seconds').textContent = String(s).padStart(2,'0');
+        }
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        // Floating bar
+        const floatingBar = document.getElementById('floatingBar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 600) floatingBar.classList.add('visible');
+            else floatingBar.classList.remove('visible');
+        });
+
+        // Scroll animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+        // Particles
+        const particlesContainer = document.getElementById('particles');
+        for (let i = 0; i < 20; i++) {
+            const p = document.createElement('div');
+            p.className = 'particle';
+            p.style.left = Math.random() * 100 + '%';
+            p.style.animationDelay = Math.random() * 15 + 's';
+            p.style.animationDuration = (10 + Math.random() * 10) + 's';
+            particlesContainer.appendChild(p);
+        }
+
+        // Dynamic seat counter (simulated live feel)
+        let currentSeats = 1203;
+        setInterval(() => {
+            if (Math.random() > 0.7 && currentSeats < 1498) {
+                currentSeats += Math.floor(Math.random() * 3) + 1;
+                document.querySelectorAll('.floating-bar-text span').forEach(el => el.textContent = currentSeats);
+            }
+        }, 8000);
+    </script>
+</body>
+</html>

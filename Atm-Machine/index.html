@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ATM Machine</title>
+    <link rel="stylesheet" href="styles.css">
+   
+</head>
+<body>
+    <div class="atm-container">
+        <div class="screen">
+            <!-- PIN Entry Screen -->
+            <div id="pin-screen" class="screen-content active">
+                <h1>ATM MACHINE</h1>
+                <div class="prompt">Enter your Pin</div>
+                <input type="text" id="pin-input" maxlength="4" placeholder="Enter PIN" autofocus />
+                <div id="pin-message"></div>
+                <div class="button-group">
+                    <button class="btn" onclick="checkPin()">SUBMIT</button>
+                    <button class="btn btn-danger" onclick="clearPin()">CLEAR</button>
+                </div>
+            </div>
+
+            <!-- Menu Screen -->
+            <div id="menu-screen" class="screen-content">
+                <h1>MAIN MENU</h1>
+                <div class="menu-list">Enter Your Choice</div>
+                <ul class="" >
+                    <li onclick="checkBalance()">1. Check Balance</li>
+                    <li onclick="showWithdraw()">2. Withdraw Money</li>
+                    <li onclick="showDeposit()">3. Deposit Money</li>
+                    <li onclick="exitATM()">4. Exit</li>
+                </ul>
+            </div>
+
+            <!-- Check Balance Screen -->
+            <div id="balance-screen" class="screen-content">
+                <h1>BALANCE INQUIRY</h1>
+                <div class="balance-display">
+                    Balance: $<span id="balance-amount">0.00</span>
+                </div>
+                <div class="button-group">
+                    <button class="btn" onclick="backToMenu()">BACK TO MENU</button>
+                </div>
+            </div>
+
+            <!-- Withdraw Money Screen -->
+            <div id="withdraw-screen" class="screen-content">
+                <h1>WITHDRAW MONEY</h1>
+                <div class="prompt">Enter Amount to Withdraw</div>
+                <input type="number" id="withdraw-input" placeholder="Enter amount" step="0.01" />
+                <div id="withdraw-message"></div>
+                <div class="button-group">
+                    <button class="btn" onclick="withdrawMoney()">WITHDRAW</button>
+                    <button class="btn btn-danger" onclick="backToMenu()">CANCEL</button>
+                </div>
+            </div>
+
+            <!-- Deposit Money Screen -->
+            <div id="deposit-screen" class="screen-content">
+                <h1>DEPOSIT MONEY</h1>
+                <div class="prompt">Enter the amount to deposit</div>
+                <input type="number" id="deposit-input" placeholder="Enter amount" step="0.01" />
+                <div id="deposit-message"></div>
+                <div class="button-group">
+                    <button class="btn" onclick="depositMoney()">DEPOSIT</button>
+                    <button class="btn btn-danger" onclick="backToMenu()">CANCEL</button>
+                </div>
+            </div>
+
+            <!-- Exit Screen -->
+            <div id="exit-screen" class="screen-content">
+                <h1>THANK YOU</h1>
+                <div class="prompt" style="text-align: center; margin-top: 50px; font-size: 1.3em;">
+                    Thank you for using our ATM!
+                    <br><br>
+                    Please collect your card
+                    <br><br>
+                    <span class="cursor"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-panel">
+            Demo PIN: <span class="info-highlight">4435</span>
+        </div>
+    </div>
+
+     <script src="script.js"></script>
+</body>
+</html>
